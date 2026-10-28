@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://ulxoxqbuxiuylaolaqxj.supabase.co/functions/v1/renta-publica; media-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Preparemos tu Renta · Contadoor</title>
+<meta name="description" content="Video y formulario personal para preparar juntos la Operación Renta 2027 de tu empresa y sus socios antes del 31 de diciembre.">
+<meta name="theme-color" content="#17091A">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="assets/js/movimiento.js"></script>
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+</head>
+<body>
+<!-- Sprite de íconos de línea -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8.5 14.5h3"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M7 15l4-4 3 3 5-6"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a1 1 0 011-1h9a1 1 0 011 1v16"/><path d="M15 10h4a1 1 0 011 1v10"/><path d="M3 21h18M8 8h3M8 12h3M8 16h3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c.9-3.3 3.3-5 6.5-5s5.6 1.7 6.5 5"/><path d="M15.5 5.2a3.5 3.5 0 010 6.6M18 15.4c1.8.7 3 2.2 3.5 4.6"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7 20h10M5 7h14"/><path d="M5 7l-2.5 6a3 3 0 005 0L5 7zM19 7l-2.5 6a3 3 0 005 0L19 7z"/></symbol>
+    <symbol id="i-out" viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M14 12h7M18 9l3 3-3 3"/><circle cx="9" cy="12" r="2"/></symbol>
+    <symbol id="i-cycle" viewBox="0 0 24 24"><path d="M20 12a8 8 0 01-13.7 5.6M4 12a8 8 0 0113.7-5.6"/><path d="M17.5 3v3.8h-3.8M6.5 21v-3.8h3.8"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></symbol>
+    <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9.5L12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2.5"/><path d="M9 3.5V5h6V3.5"/><path d="M8.5 10.5l1.5 1.5 2.5-2.5M8.5 16l1.5 1.5 2.5-2.5M14.5 11h2M14.5 16.5h2"/></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 01-12.3 7.6L3.5 21l1.4-4.9A8.5 8.5 0 1121 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 018 0v3"/><path d="M12 14.5v2.5"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16.5 6.5l2.5 2.5M14 9l2 2"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8h.01"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4 18-7z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5M12 17.3h.01"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24"><path d="M7 11.5V6.8a1.4 1.4 0 012.8 0V11M9.8 10.5V5.3a1.4 1.4 0 012.8 0v5.2M12.6 10.5V6.3a1.4 1.4 0 012.8 0v5.7"/><path d="M15.4 9.5a1.4 1.4 0 012.8 0V14a7 7 0 01-7 7h-.5a6 6 0 01-4.6-2.2L3.6 15.6a1.5 1.5 0 012.2-2L7 14.8V11.5"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 001.5.86l12-7.2a1 1 0 000-1.72l-12-7.2A1 1 0 007 4.8z"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <img src="assets/img/logo-contadoor.png" alt="Contadoor, asesorías contables para PYMEs" width="210" height="47">
+    <span class="chip-at">Renta AT2027</span>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- 1 · HERO: titular + video + Comenzar -->
+<section class="hero" aria-labelledby="h-hero">
+  <div class="barras b-h1" aria-hidden="true"><i class="h190"></i><i class="h280"></i><i class="h360"></i><i class="h250"></i></div>
+  <div class="barras b-h2" aria-hidden="true"><i class="h150"></i><i class="h250"></i><i class="h200"></i></div>
+  <div class="halo h-hero" aria-hidden="true"></div>
+  <div class="wrap rel hero-grid">
+    <div class="hero-txt">
+      <span class="eyebrow">Operación Renta 2027 · año comercial 2026</span>
+      <h1 id="h-hero">Preparemos tu <span class="kw">Renta</span> antes del 31 de diciembre</h1>
+      <p class="lead">Como cada año, quiero que lleguemos a abril tranquilos y sin sorpresas. Te grabé un video cortito con lo que necesito saber; después respondes unas preguntas y con eso armo los escenarios de tu empresa y de cada socio.</p>
+    </div>
+
+    <div class="hero-vid">
+      <!-- Video MP4 propio (assets/renta_video.mp4 + assets/renta_poster.jpg). Se activa en assets/js/config.js (VIDEO_DISPONIBLE).
+           Mientras no esté, se muestra el póster con "Video disponible pronto". -->
+      <div class="video sin-video" id="video">
+        <img class="poster" id="video-poster" src="assets/renta_poster.jpg" alt="Luciano Duarte presenta: Preparemos tu Renta, antes del 31 de diciembre" width="1280" height="720">
+        <video id="video-el" controls playsinline preload="metadata" poster="assets/renta_poster.jpg" width="1280" height="720" hidden>
+          <p>Tu navegador no puede reproducir este video.</p>
+        </video>
+        <p class="pronto" id="video-pronto"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>Video disponible pronto</p>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <div class="con-ceo"><img src="assets/img/luciano.jpg" alt="" width="34" height="34"><span>Tus respuestas las reviso <b>yo personalmente</b>, junto a tu asesor</span></div>
+      <div class="hero-ctas">
+        <button type="button" class="btn btn-prim" data-go="form">Comenzar <svg class="ic" aria-hidden="true"><use href="#i-right"/></svg></button>
+      </div>
+      <div class="chips"><span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Unos 5 minutos</span><span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Sin claves</span><span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Si puedes, respóndelo antes del <b id="fecha-limite">15 de noviembre</b></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · TARJETAS -->
+<section class="sec pt24" aria-labelledby="h-info">
+  <div class="wrap">
+    <div class="sec-h"><span class="eyebrow">Antes de empezar</span><h2 id="h-info">Lo <span class="kw">importante</span>, en corto</h2></div>
+    <div class="grid4">
+      <div class="card info"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-cal"/></svg></span><h3>Lo que decidamos ahora define abril</h3><p>Retiros, inversiones o cómo quedar frente al banco se pueden ordenar hasta el 31 de diciembre. Después del cierre ya no hay vuelta atrás, por eso quiero que lo veamos a tiempo.</p></div>
+      <div class="card info"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-list"/></svg></span><h3>Ya tenemos tus datos: solo revísalos</h3><p>Te muestro lo que tenemos de tu empresa y tus socios para que me confirmes o corrijas. Lo nuevo es contarme qué te gustaría lograr este año.</p></div>
+      <div class="card info"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-lock"/></svg></span><h3>Todo queda entre nosotros</h3><p>Lo que me cuentes es confidencial, como siempre. Y tranquilo: aquí nunca te voy a pedir claves del SII ni del banco.</p></div>
+      <div class="card info"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-clock"/></svg></span><h3>Te toma 5 minutos</h3><p>Entras con el RUT de tu empresa y un código que te llega al correo. Si algún dato no lo sabes, déjalo en blanco o marca "No sé".</p></div>
+    </div>
+    <div class="resp"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg><p><b>Tu información define el resultado.</b> Los escenarios que armemos van a ser tan buenos como lo que me cuentes aquí. Si falta un dato, no es exacto o cambia después, el resultado puede ser distinto. Por eso te pido responder con calma y con el mayor detalle posible, y avisarme cualquier cambio.</p></div>
+    <p class="wsp"><svg class="ic" aria-hidden="true"><use href="#i-dots"/></svg><span>Cualquier duda, <b>escríbenos en tu grupo de WhatsApp</b>. Estamos ahí.</span></p>
+  </div>
+</section>
+
+<!-- 3 · FORMULARIO POR PASOS -->
+<section class="sec form-sec pt12" id="formulario" aria-labelledby="h-form">
+  <div class="halo h-form" aria-hidden="true"></div>
+  <div class="wrap rel">
+    <div class="sec-h centro"><span class="eyebrow">Tus respuestas · 5 pasos</span><h2 id="h-form">Cuéntame cómo viene <span class="kw">tu año</span></h2><p class="lead centrada">Entras con el RUT de tu empresa. Lo que respondes se guarda solo mientras avanzas y antes de enviar puedes revisar todo con calma.</p></div>
+
+    <div class="form-box" id="form-box">
+      <div class="barras" aria-hidden="true"><i class="h140"></i><i class="h200"></i><i class="h160"></i></div>
+
+      <p class="saludo" id="saludo" hidden><span class="ini" aria-hidden="true"><svg class="ic"><use href="#i-wave"/></svg></span><span>Hola, <b id="saludo-emp"></b></span><button type="button" class="btn-salir" id="btn-salir">Salir</button></p>
+
+      <div class="aviso info" id="aviso-general" role="status" aria-live="polite" hidden><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span id="aviso-general-txt"></span></div>
+
+      <div class="progreso" id="progreso" hidden>
+        <div class="prog-meta"><span>Paso <span id="p-num">1</span> de 5 · <span id="p-nom">Empresa</span></span><span class="pct"><span class="guardado" id="guardado" aria-live="polite"></span> <span id="p-pct">0%</span></span></div>
+        <div class="segs" role="progressbar" aria-label="Avance del formulario" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="p-bar"><i></i><i></i><i></i><i></i><i></i></div>
+        <ol class="pasos" id="p-lista">
+          <li data-p="1"><span class="n">1</span>Empresa</li>
+          <li data-p="2"><span class="n">2</span>Socios</li>
+          <li data-p="3"><span class="n">3</span>Objetivos</li>
+          <li data-p="4"><span class="n">4</span>Contexto</li>
+          <li data-p="5"><span class="n">5</span>Resumen</li>
+        </ol>
+      </div>
+
+<form id="form" novalidate autocomplete="off">
+
+<!-- C · FORMULARIO CERRADO (campaña no abierta o servidor no disponible) -->
+<section class="step" data-step="cerrado" aria-labelledby="hc" hidden>
+  <div class="cerrado">
+    <div class="sello" aria-hidden="true"><svg class="ic"><use href="#i-cal"/></svg></div>
+    <h2 id="hc" tabindex="-1">Todavía no abrimos el <span class="kw">formulario</span></h2>
+    <p>Todavía no abrimos el formulario. Te avisaremos por correo.</p>
+    <p class="wsp"><svg class="ic" aria-hidden="true"><use href="#i-dots"/></svg><span>Cualquier duda, <b>escríbenos en tu grupo de WhatsApp</b>.</span></p>
+  </div>
+</section>
+
+<!-- 0 · ACCESO: RUT de la empresa + código de 6 dígitos al correo registrado -->
+<section class="step" data-step="0" aria-labelledby="h0">
+  <div id="acc-rut">
+    <header>
+      <span class="eyebrow">Acceso seguro</span>
+      <h2 id="h0" tabindex="-1">Ingresa el <span class="kw">RUT</span> de tu empresa</h2>
+      <p>Te mando un código de 6 dígitos al correo que tenemos registrado. Así sé que eres tú, sin claves ni contraseñas.</p>
+    </header>
+    <div class="card acc">
+      <div class="campo"><label for="acc-rut-in">RUT de la empresa</label><input type="text" id="acc-rut-in" autocomplete="off" inputmode="text" maxlength="14" placeholder="77.123.456-9" aria-describedby="e-acc-rut"><p class="err" id="e-acc-rut">Revisa el RUT: parece que el dígito verificador no calza.</p></div>
+      <button type="button" class="btn btn-prim" id="btn-rut">Enviar código <svg class="ic" aria-hidden="true"><use href="#i-send"/></svg></button>
+      <p class="err" id="e-acc-api" role="alert"></p>
+    </div>
+  </div>
+  <div id="acc-cod" hidden>
+    <header>
+      <span class="eyebrow">Acceso seguro</span>
+      <h2 id="h0b" tabindex="-1">Revisa tu <span class="kw">correo</span></h2>
+      <p id="acc-mail-txt">Si el RUT está registrado, te enviamos un código al correo de la empresa (<b class="t-fuerte" id="acc-mail"></b>). Vence en 10 minutos.</p>
+    </header>
+    <div class="card acc">
+      <fieldset><legend>Código de 6 dígitos</legend>
+        <div class="otp" id="otp">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Dígito 1 de 6">
+          <input type="text" inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Dígito 2 de 6">
+          <input type="text" inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Dígito 3 de 6">
+          <input type="text" inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Dígito 4 de 6">
+          <input type="text" inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Dígito 5 de 6">
+          <input type="text" inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Dígito 6 de 6">
+        </div>
+      </fieldset>
+      <p class="err" id="e-otp" role="alert">Escribe los 6 dígitos del código.</p>
+      <div class="acc-btns">
+        <button type="button" class="btn btn-prim" id="btn-cod">Validar código <svg class="ic" aria-hidden="true"><use href="#i-right"/></svg></button>
+        <button type="button" class="btn btn-sec" id="btn-reenviar" disabled>Reenviar código</button>
+      </div>
+      <p class="estado-sii" id="reenvio-est" aria-live="polite"></p>
+      <p class="nota-correo"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>¿Tu correo cambió? Avísanos en tu grupo de WhatsApp y lo actualizamos nosotros.</span></p>
+      <p class="nota-correo"><svg class="ic" aria-hidden="true"><use href="#i-dots"/></svg><span>¿No te llegó? Mira en spam o <b>escríbenos en tu grupo de WhatsApp</b> y lo vemos.</span></p>
+      <button type="button" class="link" id="btn-otro-rut"><svg class="ic" aria-hidden="true"><use href="#i-left"/></svg>Usar otro RUT</button>
+    </div>
+  </div>
+</section>
+
+<!-- 1 · EMPRESA (precargada: confirmar o corregir cada bloque) -->
+<section class="step" data-step="1" aria-labelledby="h1" hidden>
+  <header>
+    <span class="eyebrow">Paso 1</span>
+    <h2 id="h1" tabindex="-1">Revisemos los datos de <span class="kw">tu empresa</span></h2>
+    <p>Esto es lo que tenemos registrado. En cada bloque dime si "Está correcto" o si hay que "Corregir".</p>
+  </header>
+
+  <div class="card pre-blk" data-blk="empresa">
+    <h3><svg class="ic" aria-hidden="true"><use href="#i-building"/></svg>Datos de la empresa <span class="est-pill" data-est></span></h3>
+    <dl class="pre pre-view">
+      <div><dt>Razón social</dt><dd id="emp-rs"></dd></div>
+      <div><dt>RUT</dt><dd id="emp-rut"></dd></div>
+      <div><dt>Régimen actual</dt><dd id="emp-reg"></dd></div>
+      <div><dt>Dirección</dt><dd id="emp-dir"></dd></div>
+    </dl>
+    <div class="pre-edit" hidden>
+      <div class="grid c2">
+        <div class="campo"><label for="ed-rs">Razón social</label><input type="text" id="ed-rs" maxlength="120" autocomplete="off" aria-describedby="e-ed-rs"><p class="err" id="e-ed-rs">Escribe la razón social.</p></div>
+        <div class="campo"><span class="lbl">RUT</span><p class="fijo" id="ed-rut"></p><span class="ayuda">El RUT no se puede cambiar aquí porque es tu llave de entrada.</span></div>
+        <div class="campo"><label for="ed-reg">Régimen actual</label><select id="ed-reg"><option value="">Elige una opción</option><option>Pro Pyme General (14 D N°3)</option><option>Pro Pyme Transparente (14 D N°8)</option><option>Régimen General (14 A)</option><option>Renta presunta</option><option>No lo sé</option></select></div>
+        <div class="campo"><label for="ed-dir">Dirección</label><input type="text" id="ed-dir" maxlength="160" autocomplete="off"></div>
+        <div class="campo"><label for="ed-comuna">Comuna</label><input type="text" id="ed-comuna" maxlength="60" autocomplete="off"></div>
+      </div>
+    </div>
+    <div class="pre-acc"><button type="button" class="b-ok" data-pre="ok" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Está correcto</button><button type="button" class="b-fix" data-pre="fix" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Corregir</button></div>
+    <p class="err" data-e-blk>Cuéntame si está correcto o hay que corregirlo.</p>
+  </div>
+
+  <div class="card pre-blk" data-blk="contacto">
+    <h3><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Contacto <span class="est-pill" data-est></span></h3>
+    <dl class="pre pre-view">
+      <div><dt>Nombre</dt><dd id="ct-nombre"></dd></div>
+      <div><dt>WhatsApp</dt><dd id="ct-wsp"></dd></div>
+    </dl>
+    <div class="pre-edit" hidden>
+      <div class="grid c2">
+        <div class="campo"><label for="r-nombre">Nombre completo</label><input type="text" id="r-nombre" maxlength="120" autocomplete="off" aria-describedby="e-r-nombre"><p class="err" id="e-r-nombre">Escribe el nombre.</p></div>
+        <div class="campo"><label for="r-cargo">Cargo</label><input type="text" id="r-cargo" maxlength="80" autocomplete="off"></div>
+        <div class="campo"><label for="r-wsp">WhatsApp</label><input type="tel" id="r-wsp" maxlength="25" autocomplete="off" inputmode="tel" placeholder="+56 9 1234 5678" aria-describedby="e-r-wsp"><p class="err" id="e-r-wsp">Escribe un número de contacto (solo números, espacios o +).</p></div>
+      </div>
+    </div>
+    <div class="correo-fijo"><dl class="pre"><div><dt>Correo (recibe el código)</dt><dd class="ct-correo"></dd></div></dl><p class="nota-correo"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>¿Tu correo cambió? Avísanos en tu grupo de WhatsApp y lo actualizamos nosotros.</span></p></div>
+    <div class="pre-acc"><button type="button" class="b-ok" data-pre="ok" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Está correcto</button><button type="button" class="b-fix" data-pre="fix" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Corregir</button></div>
+    <p class="err" data-e-blk>Cuéntame si está correcto o hay que corregirlo.</p>
+  </div>
+
+  <div class="card pre-blk" data-blk="cuenta_empresa">
+    <h3><svg class="ic" aria-hidden="true"><use href="#i-card"/></svg>Cuenta bancaria de la empresa <span class="est-pill" data-est></span></h3>
+    <p class="nota-s">Si en abril hay devolución de impuestos, llega a esta cuenta. Así no se atrasa ni llega por cheque.</p>
+    <dl class="pre pre-view">
+      <div><dt>Cuenta registrada</dt><dd id="bk-txt"></dd></div>
+      <div><dt>Titular</dt><dd id="bk-tit"></dd></div>
+    </dl>
+    <div class="pre-edit" hidden>
+      <label class="acepto sep-b"><input type="checkbox" id="be-sin"><span>La empresa <b>no tiene</b> cuenta bancaria a su nombre</span></label>
+      <div id="be-cheque" class="cheque" hidden>
+        <p>Sin cuenta, si hay devolución el SII la paga con <b>cheque enviado al domicilio registrado en el SII</b>. Por eso es clave que esa dirección esté al día.</p>
+        <dl class="kv"><div><dt>Dirección que tenemos registrada</dt><dd id="be-dir-sii"></dd></div></dl>
+        <fieldset class="mt10"><legend>¿Tu dirección en el SII está vigente?</legend><div class="seg">
+          <label class="opt"><input type="radio" name="be-dir" value="vigente"><span>Sí, está vigente</span></label>
+          <label class="opt"><input type="radio" name="be-dir" value="cambio"><span>No, cambió</span></label>
+        </div></fieldset>
+        <p class="err" id="e-be-dir">Cuéntame si la dirección está vigente.</p>
+        <p class="warn" id="w-be-dir" role="status"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><span>Hay que actualizarla en el SII antes de abril. No te preocupes: te ayudamos con el trámite.</span></p>
+      </div>
+      <div class="grid c2" id="be-campos">
+        <div class="campo"><label for="be-banco">Banco</label><select id="be-banco" class="sel-banco" aria-describedby="e-be-banco"></select><p class="err" id="e-be-banco">Elige el banco.</p></div>
+        <div class="campo"><label for="be-tipo">Tipo de cuenta</label><select id="be-tipo" class="sel-tipo" aria-describedby="e-be-tipo"></select><p class="err" id="e-be-tipo">Elige el tipo de cuenta.</p></div>
+        <div class="campo"><label for="be-num">Número de cuenta</label><input type="text" id="be-num" inputmode="numeric" autocomplete="off" maxlength="24" placeholder="Solo números" aria-describedby="a-be-num e-be-num"><span class="ayuda" id="a-be-num">Viaja cifrado y en el resumen se ve así: ••••1234.</span><p class="err" id="e-be-num">Revisa el número: entre 4 y 20 dígitos (puede llevar guiones).</p></div>
+        <div class="campo"><label for="be-tit">RUT del titular</label><input type="text" id="be-tit" autocomplete="off" maxlength="14" placeholder="RUT de la empresa" aria-describedby="w-be-tit"><p class="warn" id="w-be-tit" role="status"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><span>Ojo: este RUT no es el de la empresa. La cuenta debe estar <b>a nombre de la empresa</b>: no se puede usar la cuenta personal de un socio. Solo si la empresa es persona natural o empresario individual se usa su cuenta personal, porque es el mismo RUT.</span></p></div>
+      </div>
+    </div>
+    <div class="pre-acc"><button type="button" class="b-ok" data-pre="ok" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Está correcto</button><button type="button" class="b-fix" data-pre="fix" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg><span class="b-fix-txt">Corregir</span></button></div>
+    <p class="err" data-e-blk>Cuéntame si está correcto o hay que corregirlo.</p>
+    <p class="nunca"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg>Tranquilo: nunca te vamos a pedir claves del banco ni de tarjetas.</p>
+  </div>
+</section>
+
+<!-- 2 · SOCIOS -->
+<section class="step" data-step="2" aria-labelledby="h2" hidden>
+  <header>
+    <span class="eyebrow">Paso 2</span>
+    <h2 id="h2" tabindex="-1">Los <span class="kw">socios</span> de la empresa</h2>
+    <p>La Renta de cada socio depende de lo que recibe de la empresa y de sus otros ingresos. Te muestro los socios que tenemos: confirma o corrige sus datos y completa lo demás.</p>
+  </header>
+  <div id="socios"></div>
+  <div class="suma" id="suma" aria-live="polite"><span>Participación total</span><div class="barra"><i id="suma-bar"></i></div><b id="suma-num">0%</b></div>
+  <button type="button" class="btn-add" id="btn-add"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Agregar otro socio</button>
+</section>
+
+<!-- 3 · OBJETIVOS -->
+<section class="step" data-step="3" aria-labelledby="h3" hidden>
+  <header>
+    <span class="eyebrow">Paso 3</span>
+    <h2 id="h3" tabindex="-1">¿Qué quieren <span class="kw">lograr</span> este año?</h2>
+    <p>Marca todos los que apliquen. Con esto armo los escenarios a tu medida.</p>
+  </header>
+  <div class="objs" id="objs" role="group" aria-label="Objetivos para este año">
+
+    <div class="obj" data-obj="menos">
+      <label><input type="checkbox" name="obj" value="menos"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-scale"/></svg></span><span><b>Pagar lo menos posible, dentro de la ley</b><span class="d">Usar bien los beneficios y franquicias que te corresponden.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <span class="tag">Una pregunta más</span>
+        <fieldset><legend>¿Qué te preocupa más?</legend><div class="seg">
+          <label class="opt"><input type="radio" name="menos-foco" value="empresa"><span>Impuesto de la empresa</span></label>
+          <label class="opt"><input type="radio" name="menos-foco" value="socios"><span>Impuesto de los socios</span></label>
+          <label class="opt"><input type="radio" name="menos-foco" value="ambos"><span>Ambos</span></label>
+          <label class="opt"><input type="radio" name="menos-foco" value=""><span>No sé</span></label>
+        </div></fieldset>
+      </div>
+    </div>
+
+    <div class="obj" data-obj="retiros">
+      <label><input type="checkbox" name="obj" value="retiros"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-out"/></svg></span><span><b>Retirar utilidades</b><span class="d">Sacar dinero de la empresa para los socios de forma ordenada.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <span class="tag">Una pregunta más</span>
+        <p class="campo"><span class="lbl">Monto aproximado que le gustaría retirar a cada socio (opcional)</span></p>
+        <div class="grid" id="retiros-socios"></div>
+      </div>
+    </div>
+
+    <div class="obj" data-obj="reinvertir">
+      <label><input type="checkbox" name="obj" value="reinvertir"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-cycle"/></svg></span><span><b>Reinvertir en la empresa</b><span class="d">Dejar las utilidades dentro para crecer.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <span class="tag">Una pregunta más</span>
+        <div class="campo"><label for="reinv-en">¿En qué principalmente?</label><input type="text" id="reinv-en" maxlength="300" placeholder="Ej.: capital de trabajo, ampliar el local, más personal"></div>
+      </div>
+    </div>
+
+    <div class="obj" data-obj="inversion">
+      <label><input type="checkbox" name="obj" value="inversion"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-box"/></svg></span><span><b>Hacer una inversión</b><span class="d">Comprar un activo: vehículo, propiedad, maquinaria o equipos.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <span class="tag">Una pregunta más</span>
+        <div class="grid c2">
+          <div class="campo"><label for="inv-tipo">¿Qué piensas comprar?</label><select id="inv-tipo"><option value="">Elige una opción</option><option>Vehículo</option><option>Propiedad</option><option>Maquinaria o equipos</option><option>Tecnología</option><option>Otro</option></select></div>
+          <div class="campo"><label for="inv-monto">Monto aproximado</label><input type="text" id="inv-monto" inputmode="numeric" maxlength="20" class="clp" placeholder="$ 0"></div>
+          <div class="campo"><label for="inv-cuando">¿Cuándo?</label><select id="inv-cuando"><option value="">Elige una opción</option><option>Antes del 31-dic-2026</option><option>Primer semestre 2027</option><option>Segundo semestre 2027</option><option>Aún no lo sé</option></select></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="obj" data-obj="bancos">
+      <label><input type="checkbox" name="obj" value="bancos"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-bank"/></svg></span><span><b>Ser más solvente para los bancos</b><span class="d">Mostrar un balance sólido para acceder a crédito.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <span class="tag">Una pregunta más</span>
+        <fieldset><legend>¿Piensas pedir un crédito en los próximos 12 meses?</legend><div class="seg">
+          <label class="opt"><input type="radio" name="banco-credito" value="si"><span>Sí</span></label>
+          <label class="opt"><input type="radio" name="banco-credito" value="tal_vez"><span>Tal vez</span></label>
+          <label class="opt"><input type="radio" name="banco-credito" value="no"><span>No</span></label>
+        </div></fieldset>
+        <div class="campo"><label for="banco-monto">Monto aproximado del crédito (opcional)</label><input type="text" id="banco-monto" inputmode="numeric" maxlength="20" class="clp" placeholder="$ 0"></div>
+      </div>
+    </div>
+
+    <div class="obj" data-obj="deudas">
+      <label><input type="checkbox" name="obj" value="deudas"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-doc"/></svg></span><span><b>Ordenar deudas tributarias o previsionales</b><span class="d">Regularizar con el SII, la Tesorería o las cotizaciones.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <span class="tag">Una pregunta más</span>
+        <fieldset><legend>¿Qué tipo de deuda?</legend><div class="seg">
+          <label class="opt"><input type="radio" name="deuda-tipo" value="tributaria"><span>Tributaria</span></label>
+          <label class="opt"><input type="radio" name="deuda-tipo" value="previsional"><span>Previsional</span></label>
+          <label class="opt"><input type="radio" name="deuda-tipo" value="ambas"><span>Ambas</span></label>
+          <label class="opt"><input type="radio" name="deuda-tipo" value=""><span>No sé</span></label>
+        </div></fieldset>
+      </div>
+    </div>
+
+    <div class="obj" data-obj="regimen">
+      <label><input type="checkbox" name="obj" value="regimen"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-switch"/></svg></span><span><b>Cambiar de régimen tributario</b><span class="d">Evaluar si otro régimen le conviene más a la empresa.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <span class="tag">Una pregunta más</span>
+        <div class="campo"><label for="reg-por">¿Por qué lo estás pensando?</label><input type="text" id="reg-por" maxlength="300" placeholder="Ej.: me recomendaron, las ventas crecieron mucho"></div>
+      </div>
+    </div>
+
+    <div class="obj" data-obj="otro">
+      <label><input type="checkbox" name="obj" value="otro"><span class="ico" aria-hidden="true"><svg class="ic"><use href="#i-dots"/></svg></span><span><b>Otro objetivo</b><span class="d">Cuéntamelo con tus palabras.</span></span><span class="chk" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span></label>
+      <div class="seguimiento" hidden>
+        <div class="campo"><label for="otro-txt">¿Qué te gustaría lograr?</label><textarea id="otro-txt" maxlength="300" placeholder="Escríbelo aquí"></textarea></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · CONTEXTO -->
+<section class="step" data-step="4" aria-labelledby="h4" hidden>
+  <header>
+    <span class="eyebrow">Paso 4</span>
+    <h2 id="h4" tabindex="-1">Cómo viene el <span class="kw">año</span></h2>
+    <p>Una mirada rápida a tu 2026 para afinar los números.</p>
+  </header>
+  <div class="card">
+    <h3><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Ventas</h3>
+    <fieldset><legend>Este año esperas vender, comparado con 2025…</legend><div class="seg">
+      <label class="opt"><input type="radio" name="ventas" value="mas"><span>Más</span></label>
+      <label class="opt"><input type="radio" name="ventas" value="igual"><span>Parecido</span></label>
+      <label class="opt"><input type="radio" name="ventas" value="menos"><span>Menos</span></label>
+      <label class="opt"><input type="radio" name="ventas" value="nose"><span>No sé</span></label>
+    </div></fieldset>
+    <p class="err" id="e-ventas">Elige una opción (puede ser "No sé").</p>
+  </div>
+  <div class="card">
+    <h3><svg class="ic" aria-hidden="true"><use href="#i-flag"/></svg>Eventos importantes del año</h3>
+    <fieldset><legend>¿Pasó o va a pasar algo de esto en 2026?</legend><div class="seg" id="eventos">
+      <label class="opt"><input type="checkbox" name="evento" value="venta_activos"><span>Venta de activos</span></label>
+      <label class="opt"><input type="checkbox" name="evento" value="socios"><span>Entrada o salida de socios</span></label>
+      <label class="opt"><input type="checkbox" name="evento" value="contratacion"><span>Contratación de personal</span></label>
+      <label class="opt"><input type="checkbox" name="evento" value="prestamo_socio_empresa"><span>Préstamos de socios a la empresa</span></label>
+      <label class="opt"><input type="checkbox" name="evento" value="prestamo_empresa_socio"><span>Préstamos de la empresa a socios</span></label>
+      <label class="opt"><input type="checkbox" name="evento" value="ninguno"><span>Ninguno</span></label>
+    </div></fieldset>
+    <div class="campo mt14"><label for="ev-det">Detalle (opcional)</label><textarea id="ev-det" maxlength="500" placeholder="Ej.: vendimos la camioneta en junio; entró un socio nuevo en septiembre"></textarea></div>
+  </div>
+  <div class="card">
+    <h3><svg class="ic" aria-hidden="true"><use href="#i-out"/></svg>Retiros de este año</h3>
+    <fieldset><legend>¿Los socios ya han sacado dinero de la empresa este año?</legend><div class="seg">
+      <label class="opt"><input type="radio" name="retiros-hechos" value="si"><span>Sí</span></label>
+      <label class="opt"><input type="radio" name="retiros-hechos" value="no"><span>No</span></label>
+      <label class="opt"><input type="radio" name="retiros-hechos" value=""><span>No sé</span></label>
+    </div></fieldset>
+    <div class="campo mt14" id="ret-monto-wrap" hidden><label for="ret-monto">Monto aproximado retirado en total</label><input type="text" id="ret-monto" inputmode="numeric" maxlength="20" class="clp" placeholder="$ 0" aria-describedby="a-ret-monto"><span class="ayuda" id="a-ret-monto">Basta con una cifra aproximada; nosotros la cuadramos con la contabilidad.</span></div>
+    <div class="campo mt14"><label for="comentarios">¿Algo más que quieras contarme?</label><textarea id="comentarios" maxlength="1000" placeholder="Opcional"></textarea></div>
+  </div>
+</section>
+
+<!-- 5 · RESUMEN + ACEPTACIÓN + DECLARACIÓN + AVISO DE PRIVACIDAD -->
+<section class="step" data-step="5" aria-labelledby="h5" hidden>
+  <header>
+    <span class="eyebrow">Paso 5</span>
+    <h2 id="h5" tabindex="-1">Revisa y <span class="kw">envía</span></h2>
+    <p>Dale una última mirada. Si algo no calza, vuelve con "Editar".</p>
+  </header>
+  <div class="card" id="resumen"></div>
+  <div class="card">
+    <label class="acepto"><input type="checkbox" id="acepto" aria-describedby="e-acepto"><span>Acepto que Asesorías Contadoor Ltda. use esta información, de forma confidencial, solo para planificar la Renta AT2027 de la empresa y sus socios.</span></label>
+    <p class="err" id="e-acepto">Para enviar, marca la casilla de aceptación.</p>
+    <label class="acepto mt14"><input type="checkbox" id="declaro" aria-describedby="e-declaro"><span><b>Te confirmo que la información es completa y verdadera.</b> Entiendo que la planificación y sus resultados dependen de lo que entregué, y que Asesorías Contadoor Ltda. no se hace responsable de diferencias, impuestos, multas o intereses que vengan de información incompleta, inexacta o entregada fuera de plazo. Si algo cambia antes del 31 de diciembre, les aviso.</span></label>
+    <p class="err" id="e-declaro">Para enviar, confirma la declaración sobre la información.</p>
+    <label class="acepto mt14"><input type="checkbox" id="privacidad" aria-describedby="e-privacidad"><span><b>Leí el <a href="aviso-privacidad.html" target="_blank" rel="noopener noreferrer">aviso de privacidad</a></b> (se abre en otra pestaña; versión renta-2027-v1).</span></label>
+    <p class="err" id="e-privacidad">Para enviar, confirma que leíste el aviso de privacidad.</p>
+  </div>
+</section>
+
+<!-- 6 · LISTO -->
+<section class="step" data-step="6" aria-labelledby="h6" hidden>
+  <div class="fin">
+    <div class="sello" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></div>
+    <h2 id="h6" tabindex="-1">¡<span class="kw">Gracias</span>!</h2>
+    <p id="fin-txt">Con esto armo tus escenarios y nos juntamos a revisarlos antes de fin de año.</p>
+    <div class="ok-pasos">
+      <div class="ok-paso"><div class="ok-ic" aria-hidden="true"><svg class="ic"><use href="#i-doc"/></svg></div><p><b>Reviso tus respuestas</b> junto con la contabilidad de la empresa.</p></div>
+      <div class="ok-paso"><div class="ok-ic" aria-hidden="true"><svg class="ic"><use href="#i-key"/></svg></div><p id="sig-sii"><b>Si más adelante</b> necesitamos revisar el SII de algún socio, te enviaremos un enlace seguro.</p></div>
+      <div class="ok-paso"><div class="ok-ic" aria-hidden="true"><svg class="ic"><use href="#i-cal"/></svg></div><p><b>Te escribo para juntarnos</b> y comparar escenarios antes del 31 de diciembre.</p></div>
+    </div>
+    <p class="wsp mt20"><svg class="ic" aria-hidden="true"><use href="#i-dots"/></svg><span>Cualquier duda o cambio, <b>escríbenos en tu grupo de WhatsApp</b>. Estamos ahí.</span></p>
+  </div>
+</section>
+
+</form>
+
+      <div class="acciones" id="acciones" hidden>
+        <button type="button" class="btn btn-sec" id="btn-atras"><svg class="ic" aria-hidden="true"><use href="#i-left"/></svg><span>Atrás</span></button>
+        <p class="msg-error" id="msg-error" role="alert"></p>
+        <button type="button" class="btn btn-prim" id="btn-sig"><span class="btn-sig-txt">Continuar</span><svg class="ic" aria-hidden="true"><use href="#i-right"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="pie">
+  <div class="wrap">
+    <img src="assets/img/logo-contadoor.png" alt="Contadoor" width="152" height="34">
+    <span>Asesorías Contadoor Ltda. · <a href="aviso-privacidad.html" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a></span>
+    <span class="der"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>Lo que nos cuentas aquí es confidencial y lo usamos solo para planificar tu Renta AT2027</span>
+  </div>
+</footer>
+
+<div class="movil-cta" id="movil-cta"><button type="button" class="btn btn-prim" data-go="form">Comenzar <svg class="ic" aria-hidden="true"><use href="#i-right"/></svg></button></div>
+
+<template id="tpl-socio">
+  <article class="card socio">
+    <div class="socio-head">
+      <span class="avatar" data-f="ini" aria-hidden="true">?</span>
+      <h3><span data-f="titulo">Socio</span><small data-f="sub">Datos personales</small></h3>
+      <span class="est-pill" data-f="pill"></span>
+      <button type="button" class="btn-quitar" data-act="quitar"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg><span>Quitar</span></button>
+    </div>
+    <div data-f="vista">
+      <dl class="pre"><div><dt>RUT</dt><dd data-f="v-rut"></dd></div><div><dt>Participación</dt><dd data-f="v-pct"></dd></div></dl>
+      <div class="pre-acc"><button type="button" class="b-ok" data-sact="ok" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Está correcto</button><button type="button" class="b-fix" data-sact="fix" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Corregir</button></div>
+      <p class="err" data-f="e-est">Cuéntame si está correcto o hay que corregirlo.</p>
+    </div>
+    <div class="grid c2" data-f="campos-id">
+      <div class="campo"><label data-for="nombre">Nombre completo</label><input type="text" data-k="nombre" maxlength="120" autocomplete="off" placeholder="Nombre y apellidos"><p class="err" data-e="nombre">Escribe el nombre del socio.</p></div>
+      <div class="campo"><label data-for="rut">RUT</label><input type="text" data-k="rut" maxlength="14" autocomplete="off" placeholder="12.345.678-9" inputmode="text"><p class="err" data-e="rut">RUT no válido. Revisa el dígito verificador.</p></div>
+      <div class="campo"><label data-for="pct">% de participación</label><div class="pct-wrap"><input type="text" data-k="pct" maxlength="6" inputmode="decimal" placeholder="0"></div><p class="err" data-e="pct">Escribe un porcentaje mayor que 0 (máximo 100).</p></div>
+    </div>
+    <hr class="sep">
+    <div class="grid">
+      <fieldset><legend>¿Recibe sueldo en esta empresa?</legend><div class="seg" data-radio="sueldo">
+        <label class="opt"><input type="radio" value="si"><span>Sí</span></label>
+        <label class="opt"><input type="radio" value="no"><span>No</span></label>
+      </div></fieldset>
+      <fieldset><legend>¿Tiene otros ingresos?</legend><div class="seg" data-check="otros">
+        <label class="opt"><input type="checkbox" value="sueldo_otra"><span>Sueldo en otra empresa</span></label>
+        <label class="opt"><input type="checkbox" value="honorarios"><span>Boletas de honorarios</span></label>
+        <label class="opt"><input type="checkbox" value="arriendos"><span>Arriendos</span></label>
+        <label class="opt"><input type="checkbox" value="otras_sociedades"><span>Otras sociedades</span></label>
+        <label class="opt"><input type="checkbox" value="ninguno"><span>Ninguno</span></label>
+      </div>
+      <div class="montos-otros" data-f="montos"></div>
+      </fieldset>
+      <fieldset><legend>¿Tiene deudas personales con la Tesorería (TGR)?</legend><div class="seg" data-radio="tgr">
+        <label class="opt"><input type="radio" value="si"><span>Sí</span></label>
+        <label class="opt"><input type="radio" value="no"><span>No</span></label>
+        <label class="opt"><input type="radio" value="nose"><span>No sé</span></label>
+      </div>
+      <div class="explica"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>¿Por qué te lo pregunto? Si hay deudas con la Tesorería, la devolución de abril puede quedar retenida para pagarlas. Saberlo antes me permite planificar con datos reales.</span></div>
+      </fieldset>
+      <fieldset><legend>¿Tiene alguno de estos?</legend><div class="seg" data-check="ahorro">
+        <label class="opt"><input type="checkbox" value="apv"><span>APV</span></label>
+        <label class="opt"><input type="checkbox" value="dividendo"><span>Crédito hipotecario (dividendo)</span></label>
+        <label class="opt"><input type="checkbox" value="ninguno"><span>Ninguno</span></label>
+      </div></fieldset>
+    </div>
+
+    <div class="banco">
+      <h4><svg class="ic" aria-hidden="true"><use href="#i-card"/></svg>Cuenta bancaria del socio</h4>
+      <p>Si en abril tiene devolución de impuestos, llega a esta cuenta. Así no se atrasa ni llega por cheque. Es opcional: si no la tienes a mano, la vemos después.</p>
+      <fieldset class="mb8" data-f="modo-wrap"><legend class="sr-only">¿Qué cuenta usamos?</legend><div class="seg" data-radio="cmodo">
+        <label class="opt" data-f="op-vigente"><input type="radio" value="vigente"><span data-f="txt-vigente">Usar la cuenta registrada</span></label>
+        <label class="opt"><input type="radio" value="cuenta"><span>Informar una cuenta</span></label>
+        <label class="opt"><input type="radio" value="sin_cuenta"><span>No tengo cuenta a mi nombre</span></label>
+      </div></fieldset>
+      <div data-f="cheque" class="cheque" hidden><p>Sin cuenta, si hay devolución el SII la paga con <b>cheque enviado a tu domicilio registrado en el SII</b>. Confirma si esa dirección está al día.</p><fieldset><legend>¿Tu dirección en el SII está vigente?</legend><div class="seg" data-radio="dirsii"><label class="opt"><input type="radio" value="vigente"><span>Sí, está vigente</span></label><label class="opt"><input type="radio" value="cambio"><span>No, cambió</span></label></div></fieldset><p class="err" data-f="e-dirsii">Cuéntame si la dirección está vigente.</p></div>
+      <div class="grid c2" data-f="campos-banco">
+        <div class="campo"><label data-for="banco">Banco</label><select data-k="banco" class="sel-banco"></select></div>
+        <div class="campo"><label data-for="tipo">Tipo de cuenta</label><select data-k="tipo" class="sel-tipo"></select></div>
+        <div class="campo"><label data-for="cuenta">Número de cuenta</label><input type="text" data-k="cuenta" inputmode="numeric" autocomplete="off" maxlength="24" placeholder="Solo números"><p class="err" data-e="cuenta">Completa banco, tipo y número (entre 4 y 20 dígitos), o elige otra opción.</p></div>
+        <div class="campo"><label data-for="titular">RUT del titular</label><input type="text" data-k="titular" autocomplete="off" maxlength="14" placeholder="RUT del socio"><p class="warn" data-f="warn" role="status"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><span>Ojo: este RUT no es el del socio. La devolución solo se deposita en una cuenta a nombre del socio.</span></p></div>
+      </div>
+      <p class="nunca"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg>Tranquilo: nunca te vamos a pedir claves del banco ni de tarjetas.</p>
+    </div>
+
+    <div class="sii" data-f="sii">
+      <h4><svg class="ic" aria-hidden="true"><use href="#i-key"/></svg>Acceso al SII del socio</h4>
+      <p>Mirar su situación en el SII me permite ver ingresos, retenciones y posibles deudas antes de proyectar.</p>
+      <label class="toggle"><span>Autorizo que Contadoor revise mi situación en el SII</span><input type="checkbox" role="switch" data-k="autoriza"></label>
+      <div data-f="canal">
+        <p class="canal-txt">Por seguridad, <b class="t-fuerte">la clave nunca se escribe en este formulario</b>. Se entrega por un canal protegido:</p>
+        <ol>
+          <li><span class="l">A</span><span><b>Delegar el acceso:</b> si aplica, autorizas a Contadoor directamente en el SII, sin compartir tu clave.</span></li>
+          <li><span class="l">B</span><span><b>Enlace seguro y personal:</b> te enviaremos un enlace para ingresarla. Se guarda cifrada y solo la ve tu asesor.</span></li>
+        </ol>
+        <label class="toggle"><span>Prefiero entregar la clave por el enlace seguro</span><input type="checkbox" role="switch" data-k="enlace"></label>
+        <label class="toggle"><span>Ya lo hice (delegué o entregué la clave antes)</span><input type="checkbox" role="switch" data-k="hecho"></label>
+        <p class="estado-sii" data-f="estado" aria-live="polite"></p>
+      </div>
+    </div>
+  </article>
+</template>
+</body>
+</html>
