@@ -148,7 +148,7 @@ header.top img{height:40px;width:auto}
 @media (min-width:600px){.grid.c2{grid-template-columns:1fr 1fr}}
 .campo label,.campo .lbl{display:block;font:600 14px var(--texto);margin-bottom:6px}
 .campo .ayuda{display:block;font-size:13px;color:var(--tenue);margin-top:5px}
-input[type=text],input[type=email],input[type=tel],select,textarea{
+input[type=text],input[type=email],input[type=password],input[type=tel],select,textarea{
   width:100%;min-height:48px;font:500 16px var(--texto);color:var(--tinta);background:#12080f;
   border:1px solid var(--borde);border-radius:var(--r-s);padding:0 14px;transition:border-color .2s,box-shadow .2s}
 textarea{min-height:92px;padding:12px 14px;resize:vertical;line-height:1.5}

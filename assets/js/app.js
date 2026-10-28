@@ -7,6 +7,9 @@
    - Los números de cuenta viajan solo a la Edge (que los cifra). Tras un guardado exitoso se borran de la memoria
      y en pantalla quedan como ••••1234.
    - No se guarda ningún borrador en el navegador: el borrador vive en el servidor.
+   - Claves SII (paquete F): campos type=password + autocomplete=new-password, sin botón "mostrar". Viven solo en memoria de este cierre,
+     viajan solo a la Edge (que las cifra con la bóveda de Gestoor) y se borran de la memoria y de los campos apenas el servidor confirma.
+     Nunca se muestran, ni en el resumen. Nunca en storage, URL, consola ni `window`.
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -34,7 +37,9 @@
   var paso = 0;
   var uid = 0;
   var socios = [];
-  var est = { empresa: '', contacto: '', cuenta_empresa: '' };
+  var est = { empresa: '', contacto: '', correo: '', cuenta_empresa: '' };
+  var siiEmp = { misma: '', c1: '', c2: '', entregadaAt: '' };   // clave SII de la empresa (solo memoria)
+  var claveEmpRegistrada = true;
   var guardadoEmp4 = '';        // últimos 4 de la cuenta de la empresa ya guardada en el borrador
   var cambios = 0;              // contador de cambios sin guardar
   var cola = Promise.resolve(); // guardados en serie (versión optimista)
@@ -78,7 +83,14 @@
     NO_DISPONIBLE: 'Todavía no abrimos el formulario. Te avisaremos por correo.',
     ERROR_INTERNO: 'Tuvimos un problema al procesar tu solicitud. Intenta de nuevo en un momento.',
     RED: 'No pudimos conectarnos. Revisa tu conexión a internet e intenta de nuevo.',
-    MUY_GRANDE: 'Tus respuestas quedaron muy largas. Acorta un poco los comentarios e intenta de nuevo.'
+    MUY_GRANDE: 'Tus respuestas quedaron muy largas. Acorta un poco los comentarios e intenta de nuevo.',
+    CLAVES_NO_COINCIDEN: 'Las dos claves SII no coinciden. Escríbelas de nuevo.',
+    CLAVE_INVALIDA: 'Revisa la clave SII: debe tener entre 4 y 64 caracteres.',
+    CLAVE_NO_GUARDADA: 'No pudimos guardar una de las claves SII. Tus respuestas sí quedaron guardadas: avísanos por WhatsApp y lo revisamos.',
+    SIN_SOBRE: 'No pudimos proteger la clave SII en este navegador, así que no la enviamos. Actualiza la página e intenta de nuevo (o usa otro navegador actualizado).',
+    CLAVE_EN_CLARO: 'No pudimos proteger la clave SII en este navegador, así que no la enviamos. Actualiza la página e intenta de nuevo.',
+    CORREOS_NO_COINCIDEN: 'Los dos correos no coinciden. Escríbelos de nuevo.',
+    CORREO_INVALIDO: 'Revisa el correo: parece que el formato no es válido.'
   };
   var CERRADO = ['NO_DISPONIBLE', 'CAMPANA_CERRADA', 'CAMPANA_NO_ABIERTA', 'NO_ABIERTO', 'CERRADO'];
   function texto(codigo) { return TEXTOS[codigo] || TEXTOS.ERROR_INTERNO; }
@@ -181,7 +193,7 @@
     var b = $('.pre-blk[data-blk="' + k + '"]'), e = est[k];
     b.classList.toggle('es-ok', e === 'ok'); b.classList.toggle('es-fix', e === 'fix');
     $('.b-ok', b).setAttribute('aria-pressed', String(e === 'ok')); $('.b-fix', b).setAttribute('aria-pressed', String(e === 'fix'));
-    $('.pre-edit', b).hidden = e !== 'fix'; $('.pre-view', b).hidden = e === 'fix';
+    $('.pre-edit', b).hidden = e !== 'fix'; $('.pre-view', b).hidden = e === 'fix' && k !== 'correo';
     var p = $('[data-est]', b); p.className = 'est-pill' + (e === 'ok' ? ' v' : e === 'fix' ? ' a' : ''); p.textContent = e === 'ok' ? 'Validado' : e === 'fix' ? 'Corregido' : '';
     if (e) $('[data-e-blk]', b).classList.remove('on');
     if (k === 'cuenta_empresa') pintaCuentaEmpresa();
@@ -202,6 +214,7 @@
     if (v === 'ok' && PRE) {   // vuelve a los datos originales
       if (k === 'empresa') llenaEmpresaEdit();
       if (k === 'contacto') llenaContactoEdit();
+      if (k === 'correo') { $('#r-correo').value = ''; $('#r-correo2').value = ''; }
     }
     pintaBloque(k); ocultaError();
     if (v === 'fix') { var f = $('.pre-edit input:not([type=checkbox]), .pre-edit select', b); if (f) setTimeout(function () { f.focus(); }, 30); }
@@ -210,6 +223,25 @@
   $('#be-num').addEventListener('input', function () { this.value = this.value.replace(/[^0-9.\- ]/g, ''); });
   $('#be-tit').addEventListener('input', pintaCuentaEmpresa);
   $('#be-tit').addEventListener('blur', function () { if (this.value.trim()) this.value = formatoRut(this.value); pintaCuentaEmpresa(); });
+
+  /* ─────────── Clave SII de la empresa ─────────── */
+  function pintaSiiEmp() {
+    var preg = $('#sii-emp-preg');
+    preg.hidden = !claveEmpRegistrada; $('#sii-emp-sin').hidden = claveEmpRegistrada;
+    if (!claveEmpRegistrada) siiEmp.misma = 'no';
+    setRadio('sii-emp', siiEmp.misma || null);
+    $('#sii-emp-campos').hidden = siiEmp.misma !== 'no';
+    if (siiEmp.misma) $('#e-sii-emp').classList.remove('on');
+    var e = $('#sii-emp-est');
+    if (siiEmp.entregadaAt && !siiEmp.c1) { e.textContent = 'Ya nos entregaste la clave nueva (' + hora(siiEmp.entregadaAt) + ', ' + fecha(siiEmp.entregadaAt) + '). Si cambió otra vez, escríbela de nuevo.'; e.className = 'estado-sii ok'; }
+    else e.textContent = '';
+  }
+  document.addEventListener('change', function (e) { if (e.target.name === 'sii-emp') { siiEmp.misma = e.target.value; pintaSiiEmp(); } });
+  ['#sii-emp-1', '#sii-emp-2'].forEach(function (id, n) {
+    $(id).addEventListener('input', function () { siiEmp[n ? 'c2' : 'c1'] = this.value; this.removeAttribute('aria-invalid'); $('#e-' + id.slice(1)).classList.remove('on'); });
+  });
+  function claveOk(c) { return typeof c === 'string' && c.length >= 4 && c.length <= 64 && !/[\u0000-\u001f\u007f]/.test(c); }
+  function correoOk(c) { return c.length <= 200 && /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]{2,}$/.test(c); }
 
   function llenaEmpresaEdit() {
     var e = PRE.empresa || {};
@@ -223,7 +255,7 @@
   }
   function llenaContactoEdit() {
     var c = PRE.contacto || {};
-    $('#r-nombre').value = c.nombre || ''; $('#r-cargo').value = ''; $('#r-wsp').value = c.wa || '';
+    $('#r-nombre').value = c.nombre || ''; $('#r-cargo').value = ''; $('#r-rut').value = ''; $('#r-wsp').value = c.wa || '';
   }
 
   /* ─────────── Acceso: RUT + código ─────────── */
@@ -344,17 +376,23 @@
     $('#be-dir-sii').textContent = [e.direccion, e.comuna].filter(Boolean).join(', ') || 'La revisamos en el SII';
     $('#be-tit').value = formatoRut(rutEmp); $('#be-sin').checked = false; setRadio('be-dir', null);
     $('#be-banco').value = ''; $('#be-tipo').value = ''; $('#be-num').value = ''; guardadoEmp4 = '';
-    est = { empresa: '', contacto: '', cuenta_empresa: '' };
+    est = { empresa: '', contacto: '', correo: '', cuenta_empresa: '' };
+    claveEmpRegistrada = d.clave_empresa_registrada !== false;
+    var clavesPrev = {}; (d.claves || []).forEach(function (k) { clavesPrev[k.titular === 'empresa' ? 'empresa' : rutNormal(k.titular_rut)] = k.entregada_at; });
+    siiEmp = { misma: '', c1: '', c2: '', entregadaAt: clavesPrev.empresa || '' };
+    $('#sii-emp-1').value = ''; $('#sii-emp-2').value = '';
     socios = (d.socios || []).map(function (x) {
       var s = nuevoSocio({ nombre: x.nombre || '', rut: formatoRut(x.rut), pct: x.pct == null ? '' : String(x.pct).replace('.', ',') });
-      s.pre = true; s.orig = { nombre: s.nombre, rut: s.rut, pct: s.pct }; return s;
+      s.pre = true; s.orig = { nombre: s.nombre, rut: s.rut, pct: s.pct }; s.entregadaAt = clavesPrev[rutNormal(x.rut)] || ''; return s;
     });
+    PRE.clavesPrev = clavesPrev;
     limpiaPasos35();
     var resp = d.respuesta;
     version = (resp && resp.version) || 0;
     if (resp && resp.estado === 'enviada') return mostrarEnviada(resp);
     if (resp && resp.datos) hidratar(resp.datos, resp.cuentas || []);
-    ['empresa', 'contacto', 'cuenta_empresa'].forEach(pintaBloque);
+    ['empresa', 'contacto', 'correo', 'cuenta_empresa'].forEach(pintaBloque);
+    pintaSiiEmp();
     renderSocios();
     cambios = 0; indicador(resp ? 'Borrador guardado' : '', resp ? 'ok' : '');
     if (resp) aviso('Retomamos tus respuestas guardadas' + (resp.actualizada_at ? ' (última vez a las ' + hora(resp.actualizada_at) + ')' : '') + '.', 'info');
@@ -376,11 +414,14 @@
   /* Restaura el borrador guardado en el servidor (datos + cuentas enmascaradas). */
   function hidratar(d, cuentas) {
     var b = d.bloques || {};
-    est = { empresa: b.empresa || '', contacto: b.contacto || '', cuenta_empresa: b.cuenta_empresa || '' };
+    est = { empresa: b.empresa || '', contacto: b.contacto || '', correo: b.correo || '', cuenta_empresa: b.cuenta_empresa || '' };
     var ec = d.empresa_correccion || {};
     if (est.empresa === 'fix') { $('#ed-rs').value = ec.razon_social || ''; $('#ed-dir').value = ec.direccion || ''; $('#ed-comuna').value = ec.comuna || ''; poneRegimen(ec.regimen || ''); }
     var ct = d.contacto || {};
-    if (est.contacto === 'fix') { $('#r-nombre').value = ct.nombre || ''; $('#r-cargo').value = ct.cargo || ''; $('#r-wsp').value = ct.wa || ''; }
+    if (est.contacto === 'fix') { $('#r-nombre').value = ct.nombre || ''; $('#r-cargo').value = ct.cargo || ''; $('#r-rut').value = ct.rut ? formatoRut(ct.rut) : ''; $('#r-wsp').value = ct.wa || ''; }
+    var co = d.correo_oficial || {};
+    if (est.correo === 'fix') { $('#r-correo').value = co.correo || ''; $('#r-correo2').value = co.correo || ''; }   // ya confirmado al guardarlo
+    var se = d.sii_empresa || {}; if (se.misma) siiEmp.misma = se.misma;
     var ficha = {}; socios.forEach(function (s) { ficha[rutNormal(s.rut)] = s.orig; });
     if (Array.isArray(d.socios)) {
       socios = d.socios.map(function (x) {
@@ -392,7 +433,8 @@
         s.otros = (x.otros_ingresos || []).map(function (q) { if (q.monto_anual != null) s.montos[q.tipo] = clpDe(q.monto_anual); return q.tipo; });
         if (x.otros_ninguno) s.otros.push('ninguno');
         s.ahorro = (x.ahorro || []).slice();
-        var sii = x.sii || {}; s.autoriza = !!sii.autoriza; s.enlace = sii.canal === 'enlace'; s.hecho = sii.canal === 'entregado';
+        var sii = x.sii || {}; s.pendiente = sii.vigente === 'pendiente';
+        s.entregadaAt = ((PRE && PRE.clavesPrev) || {})[rutNormal(x.rut)] || '';
         return s;
       });
     }
@@ -432,7 +474,7 @@
   function nuevoSocio(d) {
     d = d || {};
     return { id: ++uid, nombre: d.nombre || '', rut: d.rut || '', pct: d.pct || '', sueldo: '', otros: [], montos: {}, tgr: '', ahorro: [],
-      cmodo: '', banco: '', tipo: '', cuenta: '', guardado4: '', titular: '', dirsii: '', autoriza: false, enlace: false, hecho: false, retiro: '',
+      cmodo: '', banco: '', tipo: '', cuenta: '', guardado4: '', titular: '', dirsii: '', clave1: '', clave2: '', pendiente: false, entregadaAt: '', retiro: '',
       pre: false, estado: '', orig: null };
   }
   function modoSocio(s) { if (s.cmodo) return s.cmodo; return regCuenta('socio', s.rut) ? 'vigente' : 'cuenta'; }
@@ -499,13 +541,16 @@
     $('[data-f="warn"]', node).classList.toggle('on', modo === 'cuenta' && titularNoCoincide(s.titular, s.rut));
     var nc = $('[data-k="cuenta"]', node);
     nc.placeholder = s.guardado4 ? 'Guardado: ••••' + s.guardado4 + ' (déjalo en blanco para mantenerlo)' : 'Solo números';
-    var canal = $('[data-f="canal"]', node);
-    canal.hidden = !s.autoriza;
+    // Clave SII ACTUAL del socio: obligatoria, con una única salida explícita ("la enviaré después"). Nunca se muestra.
+    var mismoRut = rutNormal(s.rut) && rutNormal(s.rut) === rutEmp;
+    $('[data-f="sii-tit"]', node).textContent = 'Clave SII actual de ' + (s.nombre.trim() || ('el socio ' + (i + 1)));
+    $('[data-f="sii-campos"]', node).hidden = mismoRut;
+    $('[data-f="sii-inputs"]', node).hidden = s.pendiente;
     var es = $('[data-f="estado"]', node);
-    if (!s.autoriza) { es.textContent = ''; }
-    else if (s.hecho) { es.textContent = 'Acceso entregado. Te confirmamos cuando lo revisemos.'; es.className = 'estado-sii ok'; }
-    else if (s.enlace) { es.textContent = 'Te enviaremos el enlace seguro al correo de contacto.'; es.className = 'estado-sii ok'; }
-    else { es.textContent = 'Elige una de las dos formas, o conversémoslo en la reunión.'; es.className = 'estado-sii'; }
+    if (mismoRut) { es.textContent = 'Es el mismo RUT de la empresa: usamos la clave SII de la empresa.'; es.className = 'estado-sii ok'; }
+    else if (s.pendiente) { es.textContent = 'Queda pendiente. Cuando la tengas, avísanos por WhatsApp.'; es.className = 'estado-sii'; }
+    else if (s.entregadaAt && !s.clave1) { es.textContent = 'Ya nos entregaste su clave (' + fecha(s.entregadaAt) + '). Si cambió otra vez, escríbela de nuevo.'; es.className = 'estado-sii ok'; }
+    else es.textContent = '';
   }
 
   function socioDe(el) { var card = el.closest('.socio'); if (!card) return null; var id = +card.dataset.id; for (var i = 0; i < socios.length; i++) { if (socios[i].id === id) return { s: socios[i], i: i, card: card }; } return null; }
@@ -532,8 +577,9 @@
     }
     else if (t.dataset.k && t.type === 'checkbox') {
       r.s[t.dataset.k] = t.checked;
-      if (t.dataset.k === 'enlace' && t.checked) { r.s.hecho = false; $('[data-k="hecho"]', r.card).checked = false; }
-      if (t.dataset.k === 'hecho' && t.checked) { r.s.enlace = false; $('[data-k="enlace"]', r.card).checked = false; }
+      if (t.dataset.k === 'pendiente' && t.checked) {   // "la enviaré después": lo escrito se descarta de la memoria
+        r.s.clave1 = ''; r.s.clave2 = ''; $$('input[type="password"]', r.card).forEach(function (x) { x.value = ''; });
+      }
     }
     pintaSocio(r.card, r.s, r.i);
   });
@@ -571,6 +617,8 @@
     if (k === 'nombre') ok = s.nombre.trim().length >= 3;
     if (k === 'rut') ok = rutValido(s.rut);
     if (k === 'pct') { var n = pctNum(s.pct); ok = n !== null && !isNaN(n) && n > 0; }
+    if (k === 'clave1') ok = claveOk(s.clave1);
+    if (k === 'clave2') ok = s.clave1 === s.clave2;
     inp.setAttribute('aria-invalid', ok ? 'false' : 'true');
     var err = document.getElementById('e-' + inp.id); if (err) err.classList.toggle('on', !ok);
     return ok;
@@ -632,8 +680,49 @@
       otros_ingresos: s.otros.filter(function (t) { return OTROS[t]; }).map(function (t) { return { tipo: t, monto_anual: monto(s.montos[t]) }; }),
       otros_ninguno: s.otros.indexOf('ninguno') > -1,
       tgr: s.tgr, ahorro: s.ahorro.filter(function (x) { return AHORRO[x]; }),
-      sii: { autoriza: !!s.autoriza, canal: s.autoriza ? (s.enlace ? 'enlace' : (s.hecho ? 'entregado' : null)) : null }
+      sii: siiSocio(s)
     };
+  }
+  function siiSocio(s) {
+    var r = rutNormal(s.rut);
+    if (r && r === rutEmp) return {};
+    if (s.pendiente) return { vigente: 'pendiente' };
+    if ((claveOk(s.clave1) && s.clave1 === s.clave2) || s.entregadaAt) return { vigente: 'entregada' };
+    return {};
+  }
+  /* Claves SII que viajan en este guardado (solo pares completos y coincidentes), SELLADAS aquí mismo con la llave PÚBLICA de recepción
+     (sobre.js, ECIES P-256): la Edge y la base reciben solo el sobre; nada del servidor lo puede abrir. Tras el OK del servidor las claves
+     se borran de la memoria. Sin llave válida, sin WebCrypto o si la llave publicada no es la vigente → NO se envía ninguna clave (fail-closed). */
+  function llaveRecepcion() {
+    var L = CFG.RECEPCION_LLAVE;
+    if (!L || !/^[0-9a-f]{16}$/.test(L.kid || '') || typeof L.spki_b64 !== 'string' || !window.RentaSobre || !window.crypto || !window.crypto.subtle) return null;
+    if (PRE && PRE.recepcion_kid && PRE.recepcion_kid !== L.kid) return null;   // el servidor ya usa otra llave: recargar el sitio
+    return L;
+  }
+  function sellarClaves() {
+    var pend = [], limpiar = [];
+    if (rutEmp && siiEmp.misma === 'no' && claveOk(siiEmp.c1) && siiEmp.c1 === siiEmp.c2) {
+      pend.push({ titular: 'empresa', rut: rutEmp, clave: siiEmp.c1 });
+      limpiar.push(function (at) { siiEmp.c1 = ''; siiEmp.c2 = ''; siiEmp.entregadaAt = at; $('#sii-emp-1').value = ''; $('#sii-emp-2').value = ''; pintaSiiEmp(); });
+    }
+    var vistos = [rutEmp];
+    socios.forEach(function (s) {
+      var r = rutNormal(s.rut);
+      if (!r || vistos.indexOf(r) > -1 || s.pendiente || !claveOk(s.clave1) || s.clave1 !== s.clave2) return;
+      vistos.push(r);
+      pend.push({ titular: 'socio', rut: r, clave: s.clave1 });
+      limpiar.push(function (at) { s.clave1 = ''; s.clave2 = ''; s.entregadaAt = at;
+        $$('#socios .socio[data-id="' + s.id + '"] input[type="password"]').forEach(function (x) { x.value = ''; });
+        var card = $('#socios .socio[data-id="' + s.id + '"]'); if (card) { var rr = socioDe(card.firstElementChild); if (rr) pintaSocio(rr.card, rr.s, rr.i); } });
+    });
+    if (!pend.length) return Promise.resolve({ claves: [], limpiar: [] });
+    var L = llaveRecepcion();
+    if (!L) return Promise.resolve({ error: 'SIN_SOBRE' });
+    return Promise.all(pend.map(function (k) {
+      return window.RentaSobre.sellar(k.clave, L, { periodo: PRE && PRE.periodo, rut_empresa: rutEmp, titular: k.titular, titular_rut: k.rut })
+        .then(function (sb) { return { titular: k.titular, rut: k.rut, v: sb.v, kid: sb.kid, epk: sb.epk, iv: sb.iv, ct: sb.ct }; });
+    })).then(function (claves) { pend.length = 0; return { claves: claves, limpiar: limpiar }; },
+      function () { pend.length = 0; return { error: 'SIN_SOBRE' }; });
   }
   function armarDatos(pasoGuardar) {
     var objs = checks('obj');
@@ -645,9 +734,13 @@
     var ret = radioVal('retiros-hechos');
     return {
       paso: Math.max(0, Math.min(6, pasoGuardar)),
-      bloques: { empresa: est.empresa, contacto: est.contacto, cuenta_empresa: est.cuenta_empresa },
       empresa_correccion: est.empresa === 'fix' ? { razon_social: $('#ed-rs').value.trim(), direccion: $('#ed-dir').value.trim(), comuna: $('#ed-comuna').value.trim(), regimen: $('#ed-reg').value } : {},
-      contacto: est.contacto === 'fix' ? { nombre: $('#r-nombre').value.trim(), cargo: $('#r-cargo').value.trim(), wa: /^\+?[\d\s()-]{8,25}$/.test(wa) ? wa : '' } : {},
+      bloques: { empresa: est.empresa, contacto: est.contacto, correo: est.correo, cuenta_empresa: est.cuenta_empresa },
+      contacto: est.contacto === 'fix' ? { nombre: $('#r-nombre').value.trim(), cargo: $('#r-cargo').value.trim(), rut: rutNormal($('#r-rut').value) ? formatoRut(rutNormal($('#r-rut').value)) : '',
+        wa: /^\+?[\d\s()-]{8,25}$/.test(wa) ? wa : '' } : {},
+      // Correo oficial corregido: solo si los dos campos coinciden y el formato es válido (si no, el paso no deja avanzar).
+      correo_oficial: est.correo === 'fix' ? correoPar() : {},
+      sii_empresa: { misma: siiEmp.misma },
       socios: sociosD,
       objetivos: {
         lista: objs,
@@ -667,6 +760,10 @@
       aceptacion_uso: $('#acepto').checked, declaracion: $('#declaro').checked,
       aviso_privacidad: $('#privacidad').checked ? CFG.AVISO_PRIVACIDAD : ''
     };
+  }
+  function correoPar() {
+    var a = $('#r-correo').value.trim().toLowerCase(), b = $('#r-correo2').value.trim().toLowerCase();
+    return a && a === b && correoOk(a) ? { correo: a, correo2: b } : {};
   }
   /* Cuentas: solo se incluyen las completas y coherentes (titular = dueño). numero:null = conservar el ya guardado. */
   function armarCuentas() {
@@ -710,19 +807,28 @@
   function guardarAhora(op) {
     if (!sesion || enviada || cerrado) return Promise.resolve({ ok: false, omitido: true });
     var antes = cambios;
-    var c = armarCuentas();
+    var c = armarCuentas(), k = null, cuerpo = null;
     ultimasCuentas = c.cuentas;
     indicador('Guardando…', '');
-    return llamar('guardar', { sesion: sesion, version: version, datos: armarDatos(op.paso || paso), cuentas: c.cuentas }).then(function (r) {
+    return sellarClaves().then(function (sk) {
+      k = sk;
+      if (k.error) return { ok: false, status: 0, data: { ok: false, error: k.error } };   // ninguna clave sale sin sellar
+      cuerpo = { sesion: sesion, version: version, datos: armarDatos(op.paso || paso), cuentas: c.cuentas };
+      if (k.claves.length) cuerpo.claves = k.claves;
+      return llamar('guardar', cuerpo);
+    }).then(function (r) {
+      cuerpo = null;   // el cuerpo con las claves sale de la memoria
+      if (!r.ok && typeof r.data.version === 'number') version = r.data.version;   // el borrador quedó guardado aunque una clave fallara
       if (r.ok) {
         version = r.data.version;
         c.limpiar.forEach(function (f) { f(); });   // los números ya están cifrados en el servidor: fuera de la memoria
+        if (r.data.claves_guardadas) k.limpiar.forEach(function (f) { f(r.data.actualizada_at || new Date().toISOString()); });   // ídem claves SII
         if (cambios === antes) cambios = 0;
         indicador('Guardado ' + hora(r.data.actualizada_at), 'ok');
         return r;
       }
       indicador('Sin guardar', 'mal');
-      if (!op.silencioso || ['SESION_INVALIDA', 'VERSION_DESACTUALIZADA', 'YA_ENVIADA'].indexOf(errDe(r)) > -1 || esCerrado(r)) manejarError(r, paso);
+      if (!op.silencioso || ['SESION_INVALIDA', 'VERSION_DESACTUALIZADA', 'YA_ENVIADA', 'SIN_SOBRE'].indexOf(errDe(r)) > -1 || esCerrado(r)) manejarError(r, paso);
       return r;
     });
   }
@@ -730,9 +836,15 @@
     ocupado(btn, true);
     cola = cola.then(function () {
       var c = armarCuentas(); ultimasCuentas = c.cuentas;
-      return llamar('enviar', { sesion: sesion, version: version, datos: armarDatos(5), cuentas: c.cuentas });
+      return sellarClaves().then(function (k) {
+        if (k.error) return { ok: false, status: 0, data: { ok: false, error: k.error } };
+        var cuerpo = { sesion: sesion, version: version, datos: armarDatos(5), cuentas: c.cuentas };
+        if (k.claves.length) cuerpo.claves = k.claves;
+        return llamar('enviar', cuerpo).then(function (r) { if (r.ok && r.data.claves_guardadas) k.limpiar.forEach(function (f) { f(r.data.enviada_at || ''); }); return r; });
+      });
     }).then(function (r) {
       ocupado(btn, false);
+      if (!r.ok && typeof r.data.version === 'number') version = r.data.version;
       if (!r.ok) return manejarError(r, 5);
       enviada = true; version = r.data.version; cambios = 0;
       cerrarSesion();
@@ -746,8 +858,9 @@
     llamar('cerrar_sesion', { sesion: s }, { keepalive: !!keepalive });
   }
   function limpiarMemoriaSensible() {
-    $('#be-num').value = ''; socios.forEach(function (s) { s.cuenta = ''; });
-    $$('#socios [data-k="cuenta"]').forEach(function (i) { i.value = ''; });
+    $('#be-num').value = ''; socios.forEach(function (s) { s.cuenta = ''; s.clave1 = ''; s.clave2 = ''; });
+    $$('#socios [data-k="cuenta"], input[type="password"]').forEach(function (i) { i.value = ''; });
+    siiEmp.c1 = ''; siiEmp.c2 = '';
   }
 
   /* Paso al que lleva un campo informado por la API. */
@@ -755,7 +868,9 @@
     c = String(c || '');
     var m = c.match(/^cuentas\[(\d+)\]/);
     if (m) { var cu = ultimasCuentas[+m[1]]; return cu && cu.titular === 'empresa' ? 1 : 2; }
-    if (/^(bloques|contacto|empresa_correccion|cuentas\.empresa|cuenta_empresa)/.test(c)) return 1;
+    if (/^(bloques|contacto|correo|empresa_correccion|cuentas\.empresa|cuenta_empresa|sii_empresa|clave_empresa)/.test(c)) return 1;
+    if (/^claves\[/.test(c)) return 2;
+    if (/^clave_socio/.test(c)) return 2;
     if (/^(socios|cuentas)/.test(c)) return 2;
     if (/^objetivos/.test(c)) return 3;
     if (/^(contexto|ventas)/.test(c)) return 4;
@@ -771,7 +886,8 @@
       aviso(TEXTOS.VERSION_DESACTUALIZADA, 'alerta');
       return llamar('precarga', { sesion: sesion }).then(function (p) { if (!p.ok) return manejarError(p, enPaso); aplicarPrecarga(p.data); aviso(TEXTOS.VERSION_DESACTUALIZADA, 'alerta'); });
     }
-    var destino = (cod === 'INCOMPLETO' || cod === 'DATOS_INVALIDOS' || cod === 'CUENTA_INVALIDA' || cod === 'TITULAR_NO_COINCIDE' || cod === 'RUT_SOCIO_INVALIDO' || cod === 'SOCIO_REPETIDO')
+    var destino = (cod === 'INCOMPLETO' || cod === 'DATOS_INVALIDOS' || cod === 'CUENTA_INVALIDA' || cod === 'TITULAR_NO_COINCIDE' || cod === 'RUT_SOCIO_INVALIDO' || cod === 'SOCIO_REPETIDO'
+      || cod === 'CLAVES_NO_COINCIDEN' || cod === 'CLAVE_INVALIDA' || cod === 'CORREOS_NO_COINCIDEN' || cod === 'CORREO_INVALIDO' || cod === 'RUT_INVALIDO')
       ? (pasoDeCampo(r.data.campo) || (/^(CUENTA|TITULAR)/.test(cod) ? 2 : (/SOCIO/.test(cod) ? 2 : null))) : null;
     if (enPaso === 0) { errAcceso('#e-acc-api', texto(cod)); return; }
     if (destino && destino !== paso) irA(destino);
@@ -804,7 +920,7 @@
     function falla(el, m) { if (!primero) { primero = el; msg = m || msg; } }
     if (p === 1) {
       var sinDecidir = false;
-      ['empresa', 'contacto', 'cuenta_empresa'].forEach(function (k) {
+      ['empresa', 'contacto', 'correo', 'cuenta_empresa'].forEach(function (k) {
         var b = $('.pre-blk[data-blk="' + k + '"]');
         if (!est[k]) { $('[data-e-blk]', b).classList.add('on'); falla($('.b-ok:not([hidden])', b) || $('.b-fix', b), 'Cuéntame en cada bloque si está correcto o hay que corregirlo.'); sinDecidir = true; }
       });
@@ -813,6 +929,19 @@
         var n = $('#r-nombre'), w = $('#r-wsp');
         if (!marca(n, 'e-r-nombre', n.value.trim().length >= 3)) falla(n);
         if (!marca(w, 'e-r-wsp', w.value.replace(/\D/g, '').length >= 8 && /^\+?[\d\s()-]{8,25}$/.test(w.value.trim()))) falla(w);
+        var rr = $('#r-rut'); if (!marca(rr, 'e-r-rut', !rr.value.trim() || rutValido(rr.value))) falla(rr);
+      }
+      if (est.correo === 'fix') {
+        var c1 = $('#r-correo'), c2 = $('#r-correo2'), v1 = c1.value.trim().toLowerCase();
+        if (!marca(c1, 'e-r-correo', correoOk(v1))) falla(c1, 'Revisa el correo oficial.');
+        else if (!marca(c2, 'e-r-correo2', v1 === c2.value.trim().toLowerCase())) falla(c2, TEXTOS.CORREOS_NO_COINCIDEN);
+      }
+      // Clave SII de la empresa
+      if (!siiEmp.misma) { $('#e-sii-emp').classList.add('on'); falla($('input[name="sii-emp"]'), 'Cuéntame si la clave SII de la empresa sigue siendo la misma.'); }
+      if (siiEmp.misma === 'no' && (siiEmp.c1 || siiEmp.c2 || !siiEmp.entregadaAt)) {
+        var k1 = $('#sii-emp-1'), k2 = $('#sii-emp-2');
+        if (!marca(k1, 'e-sii-emp-1', claveOk(siiEmp.c1))) falla(k1, 'Escribe la clave SII nueva de la empresa (entre 4 y 64 caracteres).');
+        else if (!marca(k2, 'e-sii-emp-2', siiEmp.c1 === siiEmp.c2)) falla(k2, TEXTOS.CLAVES_NO_COINCIDEN);
       }
       if (est.cuenta_empresa === 'ok' && !regCuenta('empresa', rutEmp)) { est.cuenta_empresa = 'fix'; pintaBloque('cuenta_empresa'); }
       if (est.cuenta_empresa === 'fix') {
@@ -839,6 +968,12 @@
         }
         var rn = rutNormal(r.s.rut);
         if (rn) { if (rutsV.indexOf(rn) > -1) falla($('[data-k="rut"]', card) || card, TEXTOS.SOCIO_REPETIDO); rutsV.push(rn); }
+        // Clave SII actual: obligatoria, salvo "la enviaré después" o mismo RUT de la empresa (si ya la entregó, puede dejarla en blanco).
+        if (!(rn && rn === rutEmp) && !r.s.pendiente && (r.s.clave1 || r.s.clave2 || !r.s.entregadaAt)) {
+          var ic1 = $('[data-k="clave1"]', card), ic2 = $('[data-k="clave2"]', card);
+          if (!validaCampoSocio(ic1, r.s)) falla(ic1, 'Escribe la clave SII actual de cada socio o marca "No la tengo a mano ahora".');
+          else if (!validaCampoSocio(ic2, r.s)) falla(ic2, TEXTOS.CLAVES_NO_COINCIDEN);
+        }
         var modo = modoSocio(r.s);
         if (modo === 'sin_cuenta' && !r.s.dirsii) { $('[data-f="e-dirsii"]', card).classList.add('on'); falla($('[data-radio="dirsii"] input', card)); }
         if (modo === 'cuenta') {
@@ -891,11 +1026,19 @@
     if (!banco && !numero && !g4) return '';
     return [banco, tipoTxt(tipo), numero ? enmascara(numero) : (g4 ? '••••' + g4 : '')].filter(Boolean).join(' · ');
   }
+  /* Nunca la clave: solo el estado. */
   function accesoSii(s) {
-    if (!s.autoriza) return { t: 'No autoriza revisión SII', c: '' };
-    if (s.hecho) return { t: 'SII: acceso ya entregado', c: 'v' };
-    if (s.enlace) return { t: 'SII: enviar enlace seguro', c: 'v' };
-    return { t: 'SII: autoriza, canal por definir', c: 'r' };
+    var r = rutNormal(s.rut);
+    if (r && r === rutEmp) return { t: 'Clave SII: la de la empresa', c: 'v' };
+    if (s.pendiente) return { t: 'Clave SII: la enviará después', c: 'r' };
+    if (claveOk(s.clave1) && s.clave1 === s.clave2) return { t: 'Clave SII: se guarda cifrada al enviar', c: 'v' };
+    if (s.entregadaAt) return { t: 'Clave SII: entregada', c: 'v' };
+    return { t: 'Clave SII: falta', c: 'r' };
+  }
+  function claveEmpTxt() {
+    if (siiEmp.misma === 'si') return 'Sigue siendo la misma';
+    if (siiEmp.misma === 'no') return claveOk(siiEmp.c1) && siiEmp.c1 === siiEmp.c2 ? 'Cambió · la nueva se guarda cifrada al enviar' : (siiEmp.entregadaAt ? 'Cambió · nueva entregada' : 'Cambió · falta escribir la nueva');
+    return '';
   }
   function renderResumen() {
     var h = '', e = PRE.empresa || {}, c = PRE.contacto || {};
@@ -906,7 +1049,10 @@
       : cuentaTxt($('#be-banco').value, $('#be-tipo').value, $('#be-num').value, guardadoEmp4);
     h += seccion('i-building', 'Empresa y contacto', 1,
       blk('Datos de la empresa', est.empresa, '<dl class="kv">' + fila('Razón social', fixE ? $('#ed-rs').value.trim() : e.razon_social) + fila('RUT', formatoRut(rutEmp)) + fila('Régimen actual', fixE ? $('#ed-reg').value : e.regimen) + fila('Dirección', fixE ? [$('#ed-dir').value.trim(), $('#ed-comuna').value.trim()].filter(Boolean).join(', ') : [e.direccion, e.comuna].filter(Boolean).join(', ')) + '</dl>')
-      + blk('Contacto', est.contacto, '<dl class="kv">' + fila('Nombre', fixC ? [$('#r-nombre').value.trim(), $('#r-cargo').value.trim()].filter(Boolean).join(', ') : c.nombre) + fila('WhatsApp', fixC ? $('#r-wsp').value.trim() : c.wa) + fila('Correo (no editable)', c.correo_mascara) + '</dl>')
+      + blk('Responsable', est.contacto, '<dl class="kv">' + fila('Nombre', fixC ? [$('#r-nombre').value.trim(), $('#r-cargo').value.trim()].filter(Boolean).join(', ') : c.nombre)
+        + (fixC && rutNormal($('#r-rut').value) ? fila('RUT', formatoRut(rutNormal($('#r-rut').value))) : '') + fila('WhatsApp', fixC ? $('#r-wsp').value.trim() : c.wa) + '</dl>')
+      + blk('Correo de contacto oficial', est.correo, '<dl class="kv">' + fila('Correo', est.correo === 'fix' ? ($('#r-correo').value.trim().toLowerCase() + ' (lo confirma tu asesor; mientras, todo llega a ' + (c.correo_mascara || 'el registrado') + ')') : c.correo_mascara) + '</dl>')
+      + '<div class="res-blk"><h4>Clave SII de la empresa</h4><dl class="kv">' + fila('Clave', claveEmpTxt()) + '</dl></div>'
       + blk('Cuenta bancaria de la empresa', est.cuenta_empresa, '<dl class="kv">' + fila('Cuenta', cuenta) + '</dl>'));
     var hs = socios.map(function (s, i) {
       var a = accesoSii(s), modo = modoSocio(s), regS = regCuenta('socio', s.rut), ct;
@@ -952,8 +1098,9 @@
     if (n === 3 && checks('obj').indexOf('retiros') > -1) renderRetiros();
     if (n === 5) renderResumen();
     if (n === 6) {
-      var hayEnlace = socios.some(function (s) { return s.autoriza && s.enlace; });
-      $('#sig-sii').innerHTML = hayEnlace ? '<b>Te llegará por correo</b> el enlace seguro para entregar el acceso al SII de cada socio que lo eligió.' : '<b>Si más adelante</b> necesitamos revisar el SII de algún socio, te enviaremos un enlace seguro.';
+      var pend = socios.filter(function (s) { return s.pendiente; }).map(function (s) { return s.nombre.trim() || 'un socio'; });
+      $('#sig-sii').innerHTML = pend.length ? '<b>Quedó pendiente la clave SII</b> de ' + esc(pend.join(', ')) + '. Cuando la tengas, avísanos por tu grupo de WhatsApp y te habilitamos el formulario para agregarla.'
+        : '<b>Recibimos las claves SII</b> cifradas: solo tu asesor puede verlas.';
       indicador('');
     }
     paso = n;

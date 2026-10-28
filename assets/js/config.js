@@ -20,7 +20,12 @@ window.RENTA_CONFIG = Object.freeze({
   FECHA_LIMITE: '15 de noviembre',
 
   /* Versión del aviso de privacidad que se acepta (debe ser la misma que exige el servidor). */
-  AVISO_PRIVACIDAD: 'renta-2027-v1',
+  AVISO_PRIVACIDAD: 'renta-2027-v2',
+
+  /* LLAVE PÚBLICA de recepción de las claves SII (no es secreta). El navegador sella cada clave con ella (assets/js/sobre.js) y ni la Edge ni la
+     base pueden abrirla: la llave PRIVADA vive solo en el llavero del Mac del Master. La genera Luciano con `node llave.mjs generar` y se pega aquí
+     ({ kid: '…16 hex…', spki_b64: '…' }); debe ser la MISMA registrada en la base. null = el formulario NO envía claves (fail-closed). */
+  RECEPCION_LLAVE: { kid: 'b72597095b0879b0', spki_b64: 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEvn5JtYtEcvkhY/LDrOrAzU90582ZtHr/8+Jubmk/0eGgswHZxPvSOvZuVHQDl5pLYZDXiGIpN8i/FRomW2Kfdg==' },
 
   /* Autoguardado del borrador en el servidor (segundos). Nunca se guarda nada en el navegador. */
   AUTOGUARDADO_SEG: 60,
