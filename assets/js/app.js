@@ -40,6 +40,7 @@
   var est = { empresa: '', contacto: '', correo: '', cuenta_empresa: '' };
   var siiEmp = { misma: '', c1: '', c2: '', entregadaAt: '' };   // clave SII de la empresa (solo memoria)
   var claveEmpRegistrada = true;
+  var claveEmpConfirmada = false;  // el servidor confirma (true estricto) una clave SII activa de la empresa → no se pregunta
   var guardadoEmp4 = '';        // últimos 4 de la cuenta de la empresa ya guardada en el borrador
   var cambios = 0;              // contador de cambios sin guardar
   var cola = Promise.resolve(); // guardados en serie (versión optimista)
@@ -227,6 +228,9 @@
   /* ─────────── Clave SII de la empresa ─────────── */
   function pintaSiiEmp() {
     var preg = $('#sii-emp-preg');
+    // Con la clave confirmada por el servidor la tarjeta no se muestra y se responde "sigue siendo la misma" (el envío la vuelve a validar).
+    $('#sii-emp').hidden = claveEmpConfirmada;
+    if (claveEmpConfirmada) { siiEmp.misma = 'si'; siiEmp.c1 = ''; siiEmp.c2 = ''; $('#sii-emp-1').value = ''; $('#sii-emp-2').value = ''; return; }
     preg.hidden = !claveEmpRegistrada; $('#sii-emp-sin').hidden = claveEmpRegistrada;
     if (!claveEmpRegistrada) siiEmp.misma = 'no';
     setRadio('sii-emp', siiEmp.misma || null);
@@ -378,6 +382,7 @@
     $('#be-banco').value = ''; $('#be-tipo').value = ''; $('#be-num').value = ''; guardadoEmp4 = '';
     est = { empresa: '', contacto: '', correo: '', cuenta_empresa: '' };
     claveEmpRegistrada = d.clave_empresa_registrada !== false;
+    claveEmpConfirmada = d.clave_empresa_registrada === true;   // ausente, null o error → comportamiento de siempre
     var clavesPrev = {}; (d.claves || []).forEach(function (k) { clavesPrev[k.titular === 'empresa' ? 'empresa' : rutNormal(k.titular_rut)] = k.entregada_at; });
     siiEmp = { misma: '', c1: '', c2: '', entregadaAt: clavesPrev.empresa || '' };
     $('#sii-emp-1').value = ''; $('#sii-emp-2').value = '';
@@ -1036,7 +1041,7 @@
     return { t: 'Clave SII: falta', c: 'r' };
   }
   function claveEmpTxt() {
-    if (siiEmp.misma === 'si') return 'Sigue siendo la misma';
+    if (siiEmp.misma === 'si') return claveEmpConfirmada ? 'Ya la tenemos registrada' : 'Sigue siendo la misma';
     if (siiEmp.misma === 'no') return claveOk(siiEmp.c1) && siiEmp.c1 === siiEmp.c2 ? 'Cambió · la nueva se guarda cifrada al enviar' : (siiEmp.entregadaAt ? 'Cambió · nueva entregada' : 'Cambió · falta escribir la nueva');
     return '';
   }
