@@ -310,8 +310,7 @@
         return;
       }
       rutAcceso = rut;
-      // Respuesta indistinguible: se muestra igual exista o no el RUT.
-      $('#acc-mail').textContent = String(r.data.correo_mascara || '').slice(0, 60);
+      // Respuesta indistinguible (H1): el texto es fijo y no muestra ningún correo ni parte de él, exista o no el RUT.
       if (reenvio) { $('#reenvio-est').textContent = 'Si el RUT está registrado, te enviamos un código nuevo. Usa el último que te llegue.'; $('#reenvio-est').className = 'estado-sii ok'; limpiaOtp(); }
       else { limpiaOtp(); $('#reenvio-est').textContent = ''; $('#e-otp').classList.remove('on'); panelAcceso('cod'); setTimeout(function () { otps[0].focus(); }, 40); }
       arrancaEspera(r.data.reenviar_en_seg);
