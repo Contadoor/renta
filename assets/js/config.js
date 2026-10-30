@@ -14,7 +14,7 @@ window.RENTA_CONFIG = Object.freeze({
 
   /* Interruptor manual de la campaña. false = el sitio muestra "Todavía no abrimos el formulario" sin llamar a la API.
      (Además, si la API responde NO_DISPONIBLE, el sitio muestra el mismo mensaje.) */
-  FORMULARIO_ABIERTO: false,
+  FORMULARIO_ABIERTO: true,   /* AT2027 abierto: el servidor (prep_renta_config.abierto y el plan) decide quién entra. */
 
   /* Fecha sugerida que se muestra en el hero (tanda 1: 15 de noviembre; tanda Cumplimiento: 22 de noviembre). */
   FECHA_LIMITE: '15 de noviembre',
