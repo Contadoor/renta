@@ -632,6 +632,7 @@
     var t = Math.round(sumaPct() * 100) / 100;
     var box = $('#suma'); $('#suma-num').textContent = fmtPct(t);
     $('#suma-bar').style.width = Math.min(t, 100) + '%';
+    if (t === 100) errAcceso('#e-suma', '');
     box.classList.toggle('ok', t === 100); box.classList.toggle('mal', t !== 100 && t > 0); box.classList.toggle('over', t > 100);
   }
 
@@ -993,7 +994,7 @@
       var t = Math.round(sumaPct() * 100) / 100;
       if (primero) { if (!msg) msg = falta ? 'Confirma o corrige los datos de cada socio.' : 'Revisa los datos de los socios.'; }
       else if (!socios.length) { msg = 'Agrega al menos un socio.'; primero = $('#btn-add'); }
-      else if (t !== 100) { msg = 'La participación suma ' + fmtPct(t) + '. Debe sumar 100%.'; primero = $('#socios .socio [data-k="pct"]') || $('#socios .socio [data-sact="fix"]'); }
+      else if (t !== 100) { msg = 'La participación suma ' + fmtPct(t) + ': debe sumar 100%.'; primero = $('#suma'); errAcceso('#e-suma', 'La participación de los socios suma ' + fmtPct(t) + ' y debe sumar 100%. Corrige los porcentajes o usa «Agregar otro socio» para sumar al que falta.'); }
     }
     if (p === 3) { if (!checks('obj').length) { msg = 'Marca al menos un objetivo.'; primero = $('#objs input[name="obj"]'); } }
     if (p === 4) { if (!radioVal('ventas')) { $('#e-ventas').classList.add('on'); msg = 'Falta la pregunta de ventas.'; primero = $('input[name="ventas"]'); } }
@@ -1002,7 +1003,11 @@
         if (!$('#' + x[0]).checked) { $('#e-' + x[0]).classList.add('on'); falla($('#' + x[0]), x[1]); }
       });
     }
-    if (primero) { muestraError(msg); primero.focus(); return false; }
+    if (primero) {
+      muestraError(msg); primero.focus();
+      if (document.activeElement !== primero) subeA(primero.offsetParent ? primero : $('#msg-error'));   // si no recibe el foco (oculto), igual se lleva la pantalla al aviso
+      return false;
+    }
     ocultaError(); return true;
   }
 
