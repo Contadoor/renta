@@ -319,7 +319,8 @@
     <p>La Renta de cada socio depende de lo que recibe de la empresa y de sus otros ingresos. Te muestro los socios que tenemos: confirma o corrige sus datos y completa lo demás.</p>
   </header>
   <div id="socios"></div>
-  <div class="suma" id="suma" aria-live="polite"><span>Participación total</span><div class="barra"><i id="suma-bar"></i></div><b id="suma-num">0%</b></div>
+  <div class="suma" id="suma" tabindex="-1" aria-live="polite"><span>Participación total</span><div class="barra"><i id="suma-bar"></i></div><b id="suma-num">0%</b></div>
+  <p class="msg-error" id="e-suma" role="alert"></p>
   <button type="button" class="btn-add" id="btn-add"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Agregar otro socio</button>
 </section>
 
