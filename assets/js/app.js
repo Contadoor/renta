@@ -758,7 +758,7 @@
         otro_txt: objs.indexOf('otro') > -1 ? $('#otro-txt').value.trim() : ''
       },
       contexto: {
-        ventas: radioVal('ventas'), eventos: checks('evento'), eventos_detalle: $('#ev-det').value.trim(),
+        ventas: radioVal('ventas') || 'nose', eventos: checks('evento'), eventos_detalle: $('#ev-det').value.trim(),
         retiros_hechos: ret, retiros_monto: ret === 'si' ? monto($('#ret-monto').value) : null, comentarios: $('#comentarios').value.trim()
       },
       aceptacion_uso: $('#acepto').checked, declaracion: $('#declaro').checked,
@@ -1077,14 +1077,6 @@
     h += seccion('i-users', 'Socios (' + socios.length + ')', 2, hs + '<p class="nota-correo"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>Ingresos, Tesorería, APV y cuentas de los socios son respuestas nuevas.</span></p>');
     var objs = checks('obj');
     h += seccion('i-target', 'Objetivos', 3, '<p class="mb8">' + pillEst('nuevo') + '</p><dl class="kv">' + objs.map(function (k) { return fila(OBJ_NOM[k], detalleObjetivo(k) || 'Marcado'); }).join('') + '</dl>');
-    var ret = radioVal('retiros-hechos');
-    h += seccion('i-chart', 'Contexto del año', 4, '<p class="mb8">' + pillEst('nuevo') + '</p><dl class="kv">'
-      + fila('Ventas vs. 2025', VENTAS[radioVal('ventas')])
-      + fila('Eventos', checks('evento').map(function (v) { return EVENTOS[v]; }).join(', '))
-      + fila('Detalle', $('#ev-det').value.trim())
-      + fila('Retiros ya hechos', ret ? SINO[ret] + (ret === 'si' && $('#ret-monto').value ? ' · ' + clp($('#ret-monto').value) : '') : '')
-      + fila('Comentarios', $('#comentarios').value.trim())
-      + '</dl>');
     $('#resumen').innerHTML = '<p class="leyenda"><span class="pill v">Validado</span>precargado y confirmado <span class="pill a">Corregido</span>precargado y modificado <span class="pill n">Nuevo</span>respuesta nueva</p>' + h;
   }
 
@@ -1107,15 +1099,17 @@
         : '<b>Recibimos las claves SII</b> cifradas: solo tu asesor puede verlas.';
       indicador('');
     }
+    if (n === 4) n = 5;
     paso = n;
     $$('.step').forEach(function (s) { s.hidden = (s.dataset.step !== String(n)); });
     var enFlujo = typeof n === 'number' && n >= 1 && n <= 5;
     $('#progreso').hidden = !enFlujo;
     $('#acciones').hidden = !enFlujo;
     if (enFlujo) {
-      var pct = Math.round(((n - 1) / 5) * 100);
-      $('#p-num').textContent = n; $('#p-nom').textContent = NOMBRES[n]; $('#p-pct').textContent = pct + '%';
-      $$('#p-bar i').forEach(function (seg, k) { seg.classList.toggle('on', k < n); });
+      var vis = n > 4 ? n - 1 : n;
+      var pct = Math.round(((vis - 1) / 4) * 100);
+      $('#p-num').textContent = vis; $('#p-nom').textContent = NOMBRES[n]; $('#p-pct').textContent = pct + '%';
+      $$('#p-bar i').forEach(function (seg, k) { seg.classList.toggle('on', k < vis); });
       $('#p-bar').setAttribute('aria-valuenow', pct);
       $$('#p-lista li').forEach(function (li) { var p = +li.dataset.p; li.className = p < n ? 'ok' : (p === n ? 'act' : ''); if (p === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
       $('#btn-atras').classList.toggle('oculto-vis', n === 1);
@@ -1134,6 +1128,7 @@
     if (btn.disabled || !valida(paso)) return;
     if (paso === 5) return enviar(btn);
     var siguiente = paso + 1;
+    if (siguiente === 4) siguiente = 5; // el paso 4 (Cómo viene el año) se retiró
     ocupado(btn, true);
     guardar({ silencioso: true, paso: siguiente }).then(function (r) {
       ocupado(btn, false);
@@ -1148,7 +1143,7 @@
       manejarError(r, paso);
     });
   });
-  $('#btn-atras').addEventListener('click', function () { irA(Math.max(1, paso - 1)); });
+  $('#btn-atras').addEventListener('click', function () { irA(Math.max(1, paso === 5 ? 3 : paso - 1)); });
   document.addEventListener('click', function (e) {
     var g = e.target.closest('[data-go]'); if (!g) return;
     e.preventDefault();
